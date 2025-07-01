@@ -4,39 +4,47 @@ import Banner from './componentes/Banner'
 
 import Formulario from './componentes/Formulario'
 import Time from './componentes/Time'
+import { v4 as uuidv4 } from 'uuid'
 
 function App() {
 
-  const [times, setTimes ] = useState([
+  const [times, setTimes] = useState([
     {
+      id: uuidv4(),
       nome: 'Programação',
-      corPrimaria: '#57C278',
-      corSecundaria: '#D9F7E9'
+      cor: '#57C278',
+
     },
     {
+      id: uuidv4(),
       nome: 'Frontend',
-      corPrimaria: '#82cffa',
-      corSecundaria: '#E8F8FF'
-    },{
+      cor: '#82cffa',
+
+    }, {
+      id: uuidv4(),
       nome: 'Data Science',
-      corPrimaria: '#A6D157',
-      corSecundaria: '#F0F8E2'
-    },{
+      cor: '#A6D157',
+
+    }, {
+      id: uuidv4(),
       nome: 'Devops',
-      corPrimaria: '#e06b69',
-      corSecundaria: '#FDE7E8'
-    },{
+      cor: '#e06b69',
+
+    }, {
+      id: uuidv4(),
       nome: 'UX e Design',
-      corPrimaria: '#db6bbf',
-      corSecundaria: '#FAE9F5'
-    },{
+      cor: '#db6bbf',
+
+    }, {
+      id: uuidv4(),
       nome: 'Mobile',
-      corPrimaria: '#ffba05',
-      corSecundaria: '#FFF5D9'
-    },{
+      cor: '#ffba05',
+
+    }, {
+      id: uuidv4(),
       nome: 'Inovação e Gestão',
-      corPrimaria: '#ff8a29',
-      corSecundaria: '#FFEEDF'
+      cor: '#ff8a29',
+
     }
   ])
   const [colaboradores, setColaboradores] = useState([])
@@ -44,38 +52,49 @@ function App() {
     setColaboradores([...colaboradores, colaborador])
   }
 
-  function aoDeletarColaborador() {
+  function aoDeletarColaborador(prop) {
     console.log('Deletar colaborador:');
   }
 
-  function mudarCorTime( corPrimaria, nomeTime) {
+  function mudarCorTime(cor, id) {
     setTimes(times.map(time => {
-      if (time.nome === nomeTime) {
-        time.corPrimaria = corPrimaria
+
+      if (time.id === id) {
+        time.cor = cor
+        console.log('Cor do time alterada:', time.nome, 'para', cor);
         //time.corSecundaria = corSecundaria
       }
       return time
     }))
   }
 
+  function cadastrarTime(novoTime) {
+    setTimes([...times, { ...novoTime, id: uuidv4() }])
+  }
+
   return (
 
     <div>
       <Banner />
-      <Formulario times={times.map(time => time.nome)} aoColaboradorCadastrado={colaborador => aoNovoColaboradorAdicionado(colaborador)} />
+      <Formulario 
+        cadastrarTime={cadastrarTime}
+        times={times.map(time => time.nome)}
+        aoColaboradorCadastrado={colaborador => aoNovoColaboradorAdicionado(colaborador)} 
+      />
       <section className="times">
-       <h1>Minha organização</h1>
-        {times.map(time => 
-        <Time
-          key={time.nome} 
-          nome_time={time.nome}
-          corPrimaria={time.corPrimaria}
-          corSecundaria={time.corSecundaria}
-          colaboradores={colaboradores.filter(colaborador => colaborador.time === time.nome)}
-          aoDeletar={aoDeletarColaborador}
-          mudarCor={mudarCorTime}
-        />)}
-         </section>
+        <h1>Minha organização</h1>
+        {times.map(time =>
+          <Time
+            key={time.nome}
+            nome_time={time.nome}
+            cor={time.cor}
+            corSecundaria={time.corSecundaria}
+            colaboradores={colaboradores.filter(colaborador => colaborador.time === time.nome)}
+            aoDeletar={aoDeletarColaborador}
+            mudarCor={mudarCorTime}
+            id={time.id}
+          />)}
+      </section>
     </div>
 
   )
